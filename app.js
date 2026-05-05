@@ -6,6 +6,7 @@ const logger = require("./middleware/logger");
 const { errorHandler } = require("./middleware/errorHandler");
 const { sanitize, validate } = require("./middleware/validator");
 const usersRoute = require("./routes/usersRoute");
+const newsRoute = require("./routes/newsRoute");
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // --- ROUTES ---
 app.use("/api/v1/users", usersRoute);
+app.use("/api/v1/news", newsRoute);
 
 app.get("/", (req, res) => {
   res.json({ success: true, message: "News Aggregator is Live" });

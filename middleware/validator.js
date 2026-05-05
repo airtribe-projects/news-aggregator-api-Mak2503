@@ -61,6 +61,11 @@ const schemas = {
     category: Joi.string().max(20).required(),
     date: Joi.date().iso().max("now").default(Date.now),
   }),
+  newsQuery: Joi.object({
+    q: Joi.string().trim().max(120),
+    page: Joi.number().integer().min(1).max(1000).default(1),
+    pageSize: Joi.number().integer().min(1).max(100).default(20),
+  }),
 };
 
 // 2. The Validation Engine (Logic Protection)
@@ -75,6 +80,22 @@ const validate = (schemaName) => (req, res, next) => {
     return next(new AppError(message, 400));
   }
   req.body = value;
+  next();
+};
+
+const validateQuery = (schemaName) => (req, res, next) => {
+  const { error, value } = schemas[schemaName].validate(req.query, {
+    abortEarly: false,
+    stripUnknown: true,
+    convert: true,
+  });
+
+  if (error) {
+    const message = error.details.map((d) => d.message).join(", ");
+    return next(new AppError(message, 400));
+  }
+
+  req.query = value;
   next();
 };
 
@@ -104,4 +125,4 @@ const sanitize = (req, res, next) => {
   next();
 };
 
-module.exports = { validate, sanitize };
+module.exports = { validate, validateQuery, sanitize };
