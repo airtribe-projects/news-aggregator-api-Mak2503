@@ -6,9 +6,11 @@ const logger = require("./middleware/logger");
 const { errorHandler } = require("./middleware/errorHandler");
 const { sanitize, validate } = require("./middleware/validator");
 const { protect } = require("./middleware/auth");
-const app = express();
-const port = 3000;
+const usersRoute = require("./routes/usersRoute");
 
+const app = express();
+
+// --- GLOBAL MIDDLEWARE ---
 app.use(helmet()); // Adds security headers
 app.use(cors()); // Allows frontend to connect
 app.use(compression()); // Compress all responses to improve performance
@@ -16,6 +18,9 @@ app.use(express.json({ limit: "10kb" })); // Moved up to ensure body is parsed b
 app.use(sanitize); // Global deep sanitisation to clean all inputs
 app.use(logger); // Keeping existing logger
 app.use(express.urlencoded({ extended: true }));
+
+// --- ROUTES ---
+app.use("/api/v1/users", usersRoute);
 
 app.get("/", (req, res) => {
   res.json({ success: true, message: "News Aggregator is Live" });
