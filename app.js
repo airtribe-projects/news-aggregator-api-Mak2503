@@ -5,7 +5,6 @@ const compression = require("compression");
 const logger = require("./middleware/logger");
 const { errorHandler } = require("./middleware/errorHandler");
 const { sanitize, validate } = require("./middleware/validator");
-const { protect } = require("./middleware/auth");
 const usersRoute = require("./routes/usersRoute");
 
 const app = express();

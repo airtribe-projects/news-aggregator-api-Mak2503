@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const Joi = require('joi');
 
 // --- MONGODB SCHEMA (for database operations) ---
 const userSchema = new mongoose.Schema(
